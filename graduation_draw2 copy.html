@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>11 "d" Graduation Draw</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- CSS Styles --- */
+        :root {
+            /* Default (Classic) Theme Variables */
+            --primary-dark: #0a0a23; 
+            --accent-gold: #d4af37; 
+            --bg-light: #f8f9fc; 
+            --box-boy-bg: #cdd0e5; 
+            --box-girl-bg: #e8cddc; 
+            --box-text: #1a1a3d; 
+            --footer-bg: #0a0a23;
+            --footer-text: white;
+            --font-main: 'Jost', sans-serif; 
+        }
+
+        /* --- Dark Mode Variables Override --- */
+        body.dark-mode {
+            --primary-dark: #f8f9fc; 
+            --bg-light: #0a0a23; 
+            --box-boy-bg: #3e4263; 
+            --box-girl-bg: #633e4d; 
+            --box-text: #f8f9fc; 
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-main);
+            background-color: var(--bg-light);
+            color: var(--primary-dark);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: background-color 0.5s ease, color 0.5s ease;
+            overflow-x: hidden;
+        }
+
+        /* Typography & Reusables */
+        h1, h2, h3 { color: var(--primary-dark); transition: color 0.3s ease; font-weight: 700;}
+        .gold-text { color: var(--accent-gold); }
+        
+        .btn-gold {
+            background-color: var(--accent-gold);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px; 
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+            font-family: inherit;
+            font-weight: 600;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+        }
+        .btn-gold:hover { 
+            background-color: #b3932a; 
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.6);
+        }
+        .btn-gold:active { transform: scale(0.98); }
+        .btn-gold:disabled { background-color: #ccc; cursor: not-allowed; box-shadow: none; transform: none;}
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+        }
+        .brand { 
+            font-size: 1.8rem; 
+            font-weight: 700; 
+            color: var(--primary-dark); 
+            cursor: pointer;
+            letter-spacing: -0.5px;
+        }
+        .brand span { color: var(--accent-gold); }
+        
+        /* Theme Switcher Styles */
+        .theme-switch { 
+            display: flex; 
+            align-items: center; 
+            font-weight: 600; 
+            color: var(--primary-dark);
+            cursor: pointer;
+            user-select: none;
+        }
+        .switch-label { margin: 0 10px; transition: color 0.3s ease;}
+        .toggle-btn { 
+            width: 50px; height: 26px; 
+            background: var(--primary-dark); 
+            border-radius: 13px; position: relative; margin: 0 5px;
+            transition: background 0.3s ease;
+        }
+        .toggle-btn::after {
+            content: ''; position: absolute; left: 3px; top: 3px;
+            width: 20px; height: 20px; background: white; border-radius: 50%;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55); 
+        }
+        body.dark-mode .toggle-btn::after { left: 27px; background: var(--bg-light);}
+        body.dark-mode .toggle-btn { background: var(--accent-gold); }
+
+        /* Main Content Areas */
+        main {
+            flex: 1;
+            position: relative; 
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Smooth Transitions */
+        .screen {
+            display: none; 
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 900px;
+            padding: 20px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        
+        .screen.active {
+            display: flex;
+            animation: fadeIn 0.6s forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Landing Page Elements */
+        #screen-landing { margin-top: 5vh; }
+        
+        .landing-hero {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .landing-hero h1 {
+            font-size: 3.5rem;
+            line-height: 1.1;
+            max-width: 500px;
+            letter-spacing: -1px;
+        }
+        .deco-cap { width: 150px; height: auto; transition: transform 0.3s ease;}
+        .landing-hero:hover .deco-cap.tilt-left { transform: rotate(-15deg); }
+        .landing-hero:hover .deco-cap.tilt-right { transform: rotate(15deg); }
+
+        /* Class Photo Section */
+        .class-photo-section {
+            margin-top: 80px;
+            margin-bottom: 50px;
+            width: 100%;
+            max-width: 1000px;
+        }
+        .class-photo-container {
+            background-color: #0a0a23; 
+            padding: 15px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transform: rotate(-1deg);
+            transition: transform 0.4s ease;
+        }
+        .class-photo-container:hover { transform: rotate(0deg) scale(1.02); }
+        .class-photo { max-width: 100%; height: auto; display: block; border-radius: 10px;}
+
+        /* Instructions Page */
+        .instructions-list {
+            text-align: left;
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: var(--primary-dark);
+            max-width: 700px;
+            margin-bottom: 40px;
+            list-style: none; 
+        }
+        .instructions-list li { 
+            margin-bottom: 20px; 
+            padding-left: 30px;
+            position: relative;
+        }
+        .instructions-list li::before {
+            content: '✦';
+            color: var(--accent-gold);
+            position: absolute;
+            left: 0;
+            font-size: 1.2rem;
+        }
+
+        /* Draw Area & Boxes */
+        .pairing-stage {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            margin: 50px 0;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+        .person-box {
+            width: 280px;
+            height: 180px;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            color: var(--box-text);
+            box-shadow: 10px 10px 30px rgba(0,0,0,0.1), -5px -5px 20px rgba(255,255,255,0.5);
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .box-boy { background-color: var(--box-boy-bg); }
+        .box-girl { background-color: var(--box-girl-bg); }
+        
+        /* Animation: Pulse effect on active boxes */
+        .person-box.animating {
+            animation: pulseBox 0.5s infinite alternate;
+        }
+        @keyframes pulseBox {
+            from { transform: scale(1); }
+            to { transform: scale(1.03); box-shadow: 0 0 20px var(--accent-gold); }
+        }
+
+        .person-name { font-weight: 700; margin-bottom: 10px; z-index: 2; }
+        .person-height { font-size: 1.2rem; font-weight: 400; opacity: 0.8; z-index: 2;}
+        
+        .center-cap { width: 120px; animation: float 3s ease-in-out infinite; }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .pair-number-title { font-size: 2.5rem; margin-bottom: -30px; z-index: 2; color: var(--primary-dark); font-weight: 800;}
+
+        /* Final List View */
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 20px;
+            text-align: center;
+            margin: 40px 0;
+            width: 100%;
+        }
+        .pair-result {
+            background: rgba(255,255,255,0.05); 
+            border: 1px solid rgba(0,0,0,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            transition: transform 0.2s;
+            opacity: 0;
+            animation: slideUp 0.5s forwards;
+        }
+        
+        .pair-result:hover { transform: translateY(-5px); background: var(--bg-light); box-shadow: 0 5px 15px rgba(0,0,0,0.1);}
+
+        .pair-result h3 { color: var(--accent-gold); margin: 0 0 5px 0; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px;}
+        .pair-result p { font-size: 1.2rem; color: var(--primary-dark); margin: 0; font-weight: 600;}
+        
+        .center-result-cap { width: 150px; margin: 0 auto 20px auto; display: block;}
+
+        @keyframes slideUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--footer-bg);
+            color: var(--footer-text);
+            padding: 30px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+        .footer-content h2 { color: white; margin: 0 0 10px 0; font-size: 1.2rem;}
+        .credits { font-size: 0.9rem; color: var(--accent-gold); }
+        .credits div { margin-bottom: 5px; }
+        .footer-logo-img { width: 80px; height: auto; opacity: 0.8; transition: opacity 0.3s;}
+        .footer-logo-img:hover { opacity: 1; }
+        
+        /* Mobile Tweaks */
+        @media (max-width: 768px) {
+            .landing-hero { flex-direction: column; }
+            .landing-hero h1 { font-size: 2.5rem; }
+            .pairing-stage { flex-direction: column; gap: 20px; }
+            .center-cap { width: 80px; }
+            .results-grid { grid-template-columns: 1fr; }
+        }
+
+    </style>
+</head>
+<body class=""> 
+    <header>
+        <div class="brand" onclick="navigateTo('screen-landing')">11 "<span>d</span>" by AR</div>
+        
+        <div class="theme-switch" onclick="toggleTheme()">
+            <span class="switch-label">Classic</span>
+            <div class="toggle-btn"></div>
+            <span class="switch-label gold-text">Dark</span>
+        </div>
+    </header>
+
+    <main>
+        <section id="screen-landing" class="screen active">
+            <div class="landing-hero">
+                <img src="image_5.png" alt="Grad Cap" class="deco-cap tilt-left">
+                <h1>Draw for graduating couples</h1>
+                <img src="image_5.png" alt="Grad Cap" class="deco-cap tilt-right">
+            </div>
+            
+            <button class="btn-gold" onclick="navigateTo('screen-instructions')">Proceed to Draw</button>
+
+            <div class="class-photo-section">
+                <h2 class="gold-text" style="margin-bottom: 20px;">Class of 11 "d"</h2>
+                <div class="class-photo-container">
+                    <img src="class_photo.jpg" alt="Class Photo of 11d" class="class-photo" onerror="this.style.display='none'">
+                </div>
+            </div>
+        </section>
+
+        <section id="screen-instructions" class="screen">
+            <h1>How is the draw conducted?</h1>
+            <ul class="instructions-list">
+                <li>All the data about participants is collected.</li>
+                <li>The Randomizer mechanism elaborates the data and categorizes it based on gender.</li>
+                <li>The system generates unique pairs where the boy is taller than the girl.</li>
+                <li>Once started, the course of the process cannot be changed.</li>
+            </ul>
+            <button class="btn-gold" onclick="navigateTo('screen-pre-draw')">I Understand</button>
+        </section>
+
+        <section id="screen-pre-draw" class="screen">
+            <div class="pairing-stage">
+                <div class="person-box box-boy">
+                    <span style="font-size: 3rem;">?</span>
+                    <span class="person-name">Boys</span>
+                </div>
+                <div class="person-box box-girl">
+                    <span style="font-size: 3rem;">?</span>
+                    <span class="person-name">Girls</span>
+                </div>
+            </div>
+            <p style="max-width: 600px; margin-bottom: 30px;">The database is loaded. Click below to lock in the randomization and begin the reveal.</p>
+            <button class="btn-gold" onclick="startTheDraw()">Generate Pairs</button>
+        </section>
+
+        <section id="screen-reveal" class="screen">
+            <h2 id="pair-title" class="pair-number-title">Pair 1</h2>
+            <div class="pairing-stage">
+                <div class="person-box box-boy" id="box-boy-container">
+                    <span id="reveal-boy-name" class="person-name">???</span>
+                    <span id="reveal-boy-height" class="person-height">---</span>
+                </div>
+                <img src="image_5.png" alt="Grad Cap" class="center-cap">
+                <div class="person-box box-girl" id="box-girl-container">
+                    <span id="reveal-girl-name" class="person-name">???</span>
+                    <span id="reveal-girl-height" class="person-height">---</span>
+                </div>
+            </div>
+            <button id="nextpair-btn" class="btn-gold" onclick="nextPair()">Reveal Pair</button>
+        </section>
+
+        <section id="screen-results" class="screen">
+             <img src="image_5.png" alt="Grad Cap" class="center-result-cap">
+            <h1>Final Pairs List</h1>
+            <div id="results-container" class="results-grid">
+                </div>
+             <button class="btn-gold" onclick="navigateTo('screen-landing')">Back to Home</button>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <h2>Property of Desk Group</h2>
+            <div class="credits">
+                <div class="gold-text">Designed by AR</div>
+                <div class="gold-text">Developed by Rufat Ahadzade</div>
+            </div>
+        </div>
+        <img src="image_3.png" alt="DESK Group Logo" class="footer-logo-img" onerror="this.style.display='none'">
+    </footer>
+
+
+    <script>
+        // --- Configuration / Data ---
+        const boysList = [
+            { name: "Ali Ismailov", height: "188cm" },
+            { name: "Zeynal Aliev", height: "189cm" },
+            { name: "Farid Farzaliev", height: "177cm" },
+            { name: "Omar Hasanzade", height: "169cm" },
+            { name: "Jalal Huseynov", height: "184cm" },
+            { name: "Matin Gojayev", height: "184cm" },
+            { name: "Rauf Shikhverdi", height: "173cm" },
+            { name: "Habib Shikhaliyev", height: "177cm" },
+            { name: "Rauf Rajabov", height: "170cm" },
+            { name: "Huseyn Taghizade", height: "180cm" },
+            { name: "Rufat Ahadzade", height: "176cm" },
+            { name: "Amin Taghizade", height: "170cm" }  
+        ];
+
+        const girlsList = [
+            { name: "Nilufer Aghayeva", height: "179cm" },
+            { name: "Fidan Axundova", height: "180cm" },
+            { name: "Elza Karimli", height: "182cm" },
+            { name: "Fidan Jabbarova", height: "164cm" },
+            { name: "Mariam Baghirova", height: "162cm" },
+            { name: "Fatima Maliki", height: "167cm" },
+            { name: "Bilgeis Rustamli", height: "169cm" },
+            { name: "Laman Safaraliyeva", height: "185cm" },
+            { name: "Ruqayya Mammadzade", height: "160cm" },
+            { name: "Nuray Askerova", height: "168cm" },
+            { name: "Natavan Osmanova", height: "168cm" } 
+        ];
+
+        const TOTAL_PAIRS_NEEDED = 11;
+        let finalizedPairs = [];
+        let currentPairIndex = 0;
+        let isAnimating = false; 
+
+        // --- Theme Switcher Logic ---
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        // --- Navigation Logic ---
+        function navigateTo(screenId) {
+            if (isAnimating) return;
+            
+            const activeScreen = document.querySelector('.screen.active');
+            if (activeScreen && activeScreen.id === screenId) return;
+
+            isAnimating = true;
+
+            // Fade out current
+            if (activeScreen) {
+                activeScreen.classList.remove('active'); 
+                
+                setTimeout(() => {
+                    activeScreen.style.display = 'none';
+                    const nextScreen = document.getElementById(screenId);
+                    nextScreen.style.display = 'flex';
+                    requestAnimationFrame(() => {
+                        nextScreen.classList.add('active');
+                        isAnimating = false;
+                    });
+                    window.scrollTo(0,0);
+                }, 500); 
+            } else {
+                const nextScreen = document.getElementById(screenId);
+                nextScreen.classList.add('active');
+                nextScreen.style.display = 'flex';
+                isAnimating = false;
+            }
+        }
+
+        // --- The Randomizer Mechanism ---
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [
+                    array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        // Helper to get number from "180cm"
+        function getNumHeight(heightStr) {
+            return parseInt(heightStr.replace(/[^0-9]/g, ''));
+        }
+
+        // --- GENERATION LOGIC WITH RIGGING & HEIGHT CHECK ---
+        function startTheDraw() {
+            // 1. Define the Fixed Couples (Rigging)
+            const riggedCouples = [
+                { bName: "Rufat Ahadzade", gName: "Nuray Askerova" },
+                { bName: "Amin Taghizade", gName: "Natavan Osmanova" }
+            ];
+
+            // 2. Separate Rigged Participants from the General Pool
+            let availableBoys = boysList.filter(b => !riggedCouples.some(r => r.bName === b.name));
+            let availableGirls = girlsList.filter(g => !riggedCouples.some(r => r.gName === g.name));
+
+            if (availableBoys.length < (TOTAL_PAIRS_NEEDED - riggedCouples.length) || 
+                availableGirls.length < (TOTAL_PAIRS_NEEDED - riggedCouples.length)) {
+                alert("Error: Not enough participants data.");
+                return;
+            }
+
+            finalizedPairs = [];
+            const randomPairsNeeded = TOTAL_PAIRS_NEEDED - riggedCouples.length;
+
+            // 3. GENERATE VALID RANDOM PAIRS (Retry loop)
+            // We keep shuffling until we find a combination where every boy is taller than the girl.
+            let validSetFound = false;
+            let safetyCounter = 0;
+
+            while (!validSetFound && safetyCounter < 5000) {
+                safetyCounter++;
+                
+                // Shuffle both pools
+                shuffleArray(availableBoys);
+                shuffleArray(availableGirls);
+
+                let currentAttemptPairs = [];
+                let allPairsValid = true;
+
+                // Try to pair index 0 to N
+                for (let i = 0; i < randomPairsNeeded; i++) {
+                    const b = availableBoys[i];
+                    const g = availableGirls[i];
+                    
+                    // CHECK: Is Boy Taller than Girl?
+                    if (getNumHeight(b.height) > getNumHeight(g.height)) {
+                        currentAttemptPairs.push({ boy: b, girl: g });
+                    } else {
+                        // Failed this attempt
+                        allPairsValid = false;
+                        break; 
+                    }
+                }
+
+                if (allPairsValid) {
+                    finalizedPairs = currentAttemptPairs;
+                    validSetFound = true;
+                }
+            }
+
+            if (!validSetFound) {
+                // Fallback (unlikely to happen given data, but safe to have):
+                // Sort both by height descending to guarantee best matches if random fails
+                availableBoys.sort((a,b) => getNumHeight(b.height) - getNumHeight(a.height));
+                availableGirls.sort((a,b) => getNumHeight(b.height) - getNumHeight(a.height));
+                for (let i = 0; i < randomPairsNeeded; i++) {
+                    finalizedPairs.push({ boy: availableBoys[i], girl: availableGirls[i] });
+                }
+            }
+
+            // 4. Add the Rigged Pairs to the list (They are already validated manually: 176>168, 170>168)
+            riggedCouples.forEach(pair => {
+                const boyObj = boysList.find(b => b.name === pair.bName);
+                const girlObj = girlsList.find(g => g.name === pair.gName);
+                if (boyObj && girlObj) {
+                    finalizedPairs.push({ boy: boyObj, girl: girlObj });
+                }
+            });
+
+            // 5. SHUFFLE THE FINAL PAIRS LIST
+            // This ensures the rigged couples don't always appear last or first.
+            finalizedPairs = shuffleArray(finalizedPairs);
+
+            // 6. Assign pair numbers
+            finalizedPairs.forEach((pair, index) => {
+                pair.pairNumber = index + 1;
+            });
+
+            // Reset UI
+            currentPairIndex = 0;
+            document.getElementById('reveal-boy-name').innerText = "???";
+            document.getElementById('reveal-boy-height').innerText = "---";
+            document.getElementById('reveal-girl-name').innerText = "???";
+            document.getElementById('reveal-girl-height').innerText = "---";
+            document.getElementById('nextpair-btn').innerText = "Reveal Pair 1";
+            
+            navigateTo('screen-reveal');
+        }
+
+        // --- ANIMATION: Slot Machine Effect ---
+        function shuffleTextEffect(elementId, heightId, finalName, finalHeight, list) {
+            return new Promise((resolve) => {
+                const nameEl = document.getElementById(elementId);
+                const heightEl = document.getElementById(heightId);
+                let count = 0;
+                const maxCount = 20; 
+                const speed = 50; 
+
+                const interval = setInterval(() => {
+                    const randomPerson = list[Math.floor(Math.random() * list.length)];
+                    nameEl.innerText = randomPerson.name;
+                    heightEl.innerText = "???";
+                    count++;
+
+                    if (count >= maxCount) {
+                        clearInterval(interval);
+                        nameEl.innerText = finalName;
+                        heightEl.innerText = finalHeight;
+                        resolve(); 
+                    }
+                }, speed);
+            });
+        }
+
+        async function nextPair() {
+            if (isAnimating) return;
+            
+            const nextBtn = document.getElementById('nextpair-btn');
+            
+            // Check if done
+            if (currentPairIndex >= TOTAL_PAIRS_NEEDED) {
+                generateResultsList();
+                navigateTo('screen-results');
+                return;
+            }
+
+            const currentPair = finalizedPairs[currentPairIndex];
+            
+            // Update Title
+            document.getElementById('pair-title').innerText = "Pair " + currentPair.pairNumber;
+
+            // Start Animation sequence
+            isAnimating = true;
+            nextBtn.disabled = true;
+            nextBtn.innerText = "Drawing...";
+
+            // 1. REVEAL BOY FIRST
+            document.getElementById('box-boy-container').classList.add('animating');
+            await shuffleTextEffect('reveal-boy-name', 'reveal-boy-height', currentPair.boy.name, currentPair.boy.height, boysList);
+            document.getElementById('box-boy-container').classList.remove('animating');
+
+            // Small pause for dramatic effect
+            await new Promise(r => setTimeout(r, 400));
+
+            // 2. REVEAL GIRL SECOND
+            document.getElementById('box-girl-container').classList.add('animating');
+            await shuffleTextEffect('reveal-girl-name', 'reveal-girl-height', currentPair.girl.name, currentPair.girl.height, girlsList);
+            document.getElementById('box-girl-container').classList.remove('animating');
+
+            // Animation Finished
+            isAnimating = false;
+            nextBtn.disabled = false;
+
+            // Prepare for next step
+            currentPairIndex++;
+            if (currentPairIndex < TOTAL_PAIRS_NEEDED) {
+                nextBtn.innerText = "Next Pair (" + (currentPairIndex + 1) + ")";
+                
+                nextBtn.onclick = function() {
+                    // Reset to ??? instantly on click
+                    document.getElementById('reveal-boy-name').innerText = "???";
+                    document.getElementById('reveal-boy-height').innerText = "---";
+                    document.getElementById('reveal-girl-name').innerText = "???";
+                    document.getElementById('reveal-girl-height').innerText = "---";
+                    
+                    nextBtn.onclick = nextPair; 
+                    nextPair(); 
+                };
+
+            } else {
+                nextBtn.innerText = "Show Final Results";
+                nextBtn.onclick = function() {
+                     generateResultsList();
+                     navigateTo('screen-results');
+                }
+            }
+        }
+
+        // --- Results Generation ---
+        function generateResultsList() {
+            const container = document.getElementById('results-container');
+            container.innerHTML = ''; 
+
+            finalizedPairs.forEach((pair, index) => {
+                const pairDiv = document.createElement('div');
+                pairDiv.className = 'pair-result';
+                pairDiv.style.animationDelay = `${index * 0.1}s`;
+                
+                pairDiv.innerHTML = `
+                    <h3>Pair ${pair.pairNumber}</h3>
+                    <p>${pair.boy.name} <span class="gold-text">&</span> ${pair.girl.name}</p>
+                    <p style="font-size: 0.8rem; opacity: 0.6;">(${pair.boy.height} / ${pair.girl.height})</p>
+                `;
+                container.appendChild(pairDiv);
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.getElementById('screen-landing').style.display = 'flex';
+            setTimeout(() => {
+                 document.getElementById('screen-landing').classList.add('active');
+            }, 50);
+        });
+
+    </script>
+</body>
+</html>
